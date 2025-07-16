@@ -1,7 +1,45 @@
-import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+'use client';
 
-const players = [
+import React, { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
+
+// 타입 정의
+interface Stats {
+  power: number;
+  accuracy: number;
+  defense: number;
+  speed: number;
+  fielding: number;
+  throwing: number;
+  plateDiscipline?: number;
+  patience?: number;
+}
+
+interface Player {
+  id: string;
+  name: string;
+  team: string;
+  position: string;
+  cardType: string;
+  grade: number;
+  year: number;
+  overall: number;
+  training: number;
+  enhancement: number;
+  launchAngle: number;
+  setDeckScore: number;
+  hotZone: string[];
+  coldZone: string[];
+  stats: Stats;
+  star?: number;
+}
+
+interface Comment {
+  rating: number;
+  comment: string;
+}
+
+const players: Player[] = [
   {
     id: "1",
     name: "박석민",
@@ -27,38 +65,33 @@ const players = [
     cardType: "레전드",
     grade: 85,
     year: 2017,
+    overall: 100,
+    training: 10,
+    enhancement: 5,
+    launchAngle: 15,
+    setDeckScore: 5,
+    hotZone: ["중앙"],
+    coldZone: ["하단"],
     stats: { power: 90, accuracy: 85, defense: 80, speed: 60, fielding: 75, throwing: 80 },
   },
 ];
 
-// getStaticPaths, getStaticProps 추가
-export async function getStaticPaths() {
-  // 모든 선수 id에 대해 경로 생성
-  const paths = players.map((p) => ({ params: { id: p.id } }));
-  return { paths, fallback: false };
-}
-
-export async function getStaticProps({ params }) {
-  // id에 해당하는 선수 데이터 전달
-  const player = players.find((p) => p.id === params.id) || null;
-  return { props: { player } };
-}
-
-// 기존 컴포넌트에서 player를 props로 받도록 수정
-export default function PlayerDetail({ player }) {
+export default function PlayerDetail() {
+  const { id } = useParams();
   const router = useRouter();
-  // const { id } = router.query; // 이 부분은 이제 props로 받음
-  // const player = players.find((p) => p.id === id); // 이 부분은 이제 props로 받음
+
+  // 선수 데이터 찾기
+  const player = players.find((p) => p.id === id) || null;
 
   // 별점/댓글 상태
-  const [rating, setRating] = useState(0);
-  const [comment, setComment] = useState("");
-  const [comments, setComments] = useState([]);
+  const [rating, setRating] = useState<number>(0);
+  const [comment, setComment] = useState<string>("");
+  const [comments, setComments] = useState<Comment[]>([]);
 
   // 훈련/강화 상태
-  const [training, setTraining] = useState(player?.training || 0);
-  const [enhancement, setEnhancement] = useState(player?.enhancement || 0);
-  const [overall, setOverall] = useState(player?.overall || 0);
+  const [training, setTraining] = useState<number>(player?.training || 0);
+  const [enhancement, setEnhancement] = useState<number>(player?.enhancement || 0);
+  const [overall, setOverall] = useState<number>(player?.overall || 0);
 
   // 오버롤 계산(예시: 훈련, 강화에 따라 단순 가산)
   useEffect(() => {
@@ -69,28 +102,28 @@ export default function PlayerDetail({ player }) {
 
   // LocalStorage에서 불러오기
   useEffect(() => {
-    if (player?.id) { // player가 null이 아닐 때만 실행
+    if (player?.id) {
       const saved = localStorage.getItem(`comments_${player.id}`);
       if (saved) setComments(JSON.parse(saved));
     }
-  }, [player?.id]); // player.id가 변경될 때만 실행
+  }, [player?.id]);
 
   // LocalStorage에 저장
   useEffect(() => {
-    if (player?.id) { // player가 null이 아닐 때만 실행
+    if (player?.id) {
       localStorage.setItem(`comments_${player.id}`, JSON.stringify(comments));
     }
-  }, [comments, player?.id]); // comments 또는 player.id가 변경될 때만 실행
+  }, [comments, player?.id]);
 
   if (!player) {
     return <div>선수 정보를 찾을 수 없습니다.</div>;
   }
 
   // 별점 클릭
-  const handleStarClick = (star) => setRating(star);
+  const handleStarClick = (star: number) => setRating(star);
 
   // 댓글 등록
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (comment.trim() === "") return;
     setComments([...comments, { rating, comment }]);
@@ -134,8 +167,8 @@ export default function PlayerDetail({ player }) {
       }}>
         {/* 즐겨찾기(하트) 버튼 */}
         <button style={{ position: "absolute", top: 28, right: 28, background: "#fff", border: "1.5px solid #e53935", borderRadius: "50%", width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", boxShadow: "0 2px 8px rgba(0,0,0,0.10)", zIndex: 10, transition: 'box-shadow 0.2s, border 0.2s' }}
-          onMouseOver={e => { e.currentTarget.style.boxShadow = '0 4px 16px rgba(229,57,53,0.15)'; e.currentTarget.style.border = '2px solid #e53935'; }}
-          onMouseOut={e => { e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.10)'; e.currentTarget.style.border = '1.5px solid #e53935'; }}
+          onMouseOver={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 16px rgba(229,57,53,0.15)'; (e.currentTarget as HTMLButtonElement).style.border = '2px solid #e53935'; }}
+          onMouseOut={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 2px 8px rgba(0,0,0,0.10)'; (e.currentTarget as HTMLButtonElement).style.border = '1.5px solid #e53935'; }}
         >
           <span style={{ color: "#e53935", fontSize: 26, fontWeight: 700, transition: 'color 0.2s' }}>♥</span>
         </button>
@@ -186,8 +219,9 @@ export default function PlayerDetail({ player }) {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 32px)', gridTemplateRows: 'repeat(3, 32px)', gap: 3, width: 101, height: 101 }}>
               {[0,1,2,3,4,5,6,7,8].map(idx => {
                 let color = '#fff';
-                if (player.hotZone && [0,4].includes(idx)) color = '#ffb4b4';
-                if (player.coldZone && [8].includes(idx)) color = '#b4c6ff';
+                if (player.hotZone && player.hotZone.includes("좌상") && idx === 0) color = '#ffb4b4';
+                if (player.hotZone && player.hotZone.includes("중앙") && idx === 4) color = '#ffb4b4';
+                if (player.coldZone && player.coldZone.includes("우하") && idx === 8) color = '#b4c6ff';
                 return <div key={idx} style={{ width: 32, height: 32, background: color, border: '1.2px solid #bbb', borderRadius: 5 }} />;
               })}
             </div>
@@ -206,53 +240,25 @@ export default function PlayerDetail({ player }) {
           ].map((stat) => {
             const blueWidth = Math.max(0, Math.min(100, stat.value));
             const redWidth = stat.value > 100 ? Math.min(100, stat.value - 100) : 0;
-            // 50~59, 60~69, ..., 190~199, 200+
             const statColorSteps = [
-              '#bdbdbd', // 50~59
-              '#bbdefb', // 60~69
-              '#90caf9', // 70~79
-              '#64b5f6', // 80~89
-              '#42a5f5', // 90~99
-              '#1e88e5', // 100~109
-              '#1976d2', // 110~119
-              '#1565c0', // 120~129
-              '#0d47a1', // 130~139
-              '#00bcd4', // 140~149
-              '#26a69a', // 150~159
-              '#43a047', // 160~169
-              '#fbc02d', // 170~179
-              '#ff9800', // 180~189
-              '#e53935', // 190~199
-              '#b71c1c', // 200+
+              '#bdbdbd', '#bbdefb', '#90caf9', '#64b5f6', '#42a5f5', '#1e88e5', '#1976d2',
+              '#1565c0', '#0d47a1', '#00bcd4', '#26a69a', '#43a047', '#fbc02d', '#ff9800',
+              '#e53935', '#b71c1c',
             ];
             let statColor = statColorSteps[0];
-            if (stat.value >= 200) statColor = statColorSteps[15];
-            else if (stat.value >= 190) statColor = statColorSteps[14];
-            else if (stat.value >= 180) statColor = statColorSteps[13];
-            else if (stat.value >= 170) statColor = statColorSteps[12];
-            else if (stat.value >= 160) statColor = statColorSteps[11];
-            else if (stat.value >= 150) statColor = statColorSteps[10];
-            else if (stat.value >= 140) statColor = statColorSteps[9];
-            else if (stat.value >= 130) statColor = statColorSteps[8];
-            else if (stat.value >= 120) statColor = statColorSteps[7];
-            else if (stat.value >= 110) statColor = statColorSteps[6];
-            else if (stat.value >= 100) statColor = statColorSteps[5];
-            else if (stat.value >= 90) statColor = statColorSteps[4];
-            else if (stat.value >= 80) statColor = statColorSteps[3];
-            else if (stat.value >= 70) statColor = statColorSteps[2];
-            else if (stat.value >= 60) statColor = statColorSteps[1];
-            // 50~59는 기본
+            if (stat.value >= 50) {
+                const index = Math.min(Math.floor((stat.value - 50) / 10), statColorSteps.length - 1);
+                statColor = statColorSteps[index];
+            }
             return (
               <div key={stat.label} style={{ display: "flex", flexDirection:'column', alignItems: "flex-start", gap: 6, background:'#f7f9fc', borderRadius:6, padding:'14px 14px', border:'1px solid #e0e7ef', minWidth:0 }}>
                 <span style={{ fontWeight: 600, color:'#1976d2', fontSize:14, marginBottom:4, width:'100%', textAlign:'left', display:'block' }}>{stat.label}</span>
                 <div style={{ display:'flex', flexDirection:'row', alignItems:'center', width:'100%', gap:10 }}>
                   <span style={{ fontWeight: 700, color:statColor, fontSize:18, width:'100%', textAlign:'left', display:'block' }}>{stat.value}</span>
                   <div style={{ position: "relative", width: 100, height: 8, background: "#e3eaf6", borderRadius: 4, overflow: "hidden", flexShrink: 0 }}>
-                    {/* 파란색 바 (0~100까지) */}
                     {blueWidth > 0 && (
                       <div style={{ width: `${blueWidth}%`, height: "100%", background: "#3496f4", borderRadius: 4, position: "absolute", left: 0, top: 0, zIndex: 1 }} />
                     )}
-                    {/* 빨간색 바 (100 초과분, 왼쪽부터 겹침) */}
                     {redWidth > 0 && (
                       <div style={{ width: `${redWidth}%`, height: "100%", background: "#ff4d4f", borderRadius: 4, position: "absolute", left: 0, top: 0, zIndex: 2, mixBlendMode: 'screen' }} />
                     )}
@@ -266,7 +272,6 @@ export default function PlayerDetail({ player }) {
           뒤로가기
         </button>
         <hr style={{ margin: "24px 0 28px 0", border:0, borderTop:'1.5px solid #e0e7ef' }} />
-        {/* 별점/댓글 */}
         <h2 style={{ marginBottom: 14, fontSize:20, fontWeight:700, color:'#222' }}>평가/댓글 남기기</h2>
         <form onSubmit={handleSubmit} style={{marginBottom:18}}>
           <div style={{ marginBottom: 8, display:'flex', alignItems:'center' }}>
@@ -307,8 +312,8 @@ export default function PlayerDetail({ player }) {
           <div style={{ marginBottom: 8, fontWeight:600, color:'#FFD600' }}>
             평균 별점: {" "}
             <span style={{ color: "#FFD600", fontWeight: 700 }}>
-              {"★".repeat(Math.round(averageRating))}
-              {"☆".repeat(5 - Math.round(averageRating))}
+              {"★".repeat(Math.round(Number(averageRating)))}
+              {"☆".repeat(5 - Math.round(Number(averageRating)))}
             </span>{" "}
             ({averageRating})
           </div>
