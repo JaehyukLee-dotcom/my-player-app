@@ -1,7 +1,33 @@
-import React, { useState } from "react";
+'use client';
+
+import React, { useState, CSSProperties } from "react";
+
+// 선수 데이터 타입 정의
+interface Player {
+  id: number;
+  name: string;
+  pos: string;
+  ovr: number;
+  team: string;
+  cardType: string;
+}
+
+// 포지션 데이터 타입 정의
+interface Position {
+  key: string;
+  label: string;
+  style: CSSProperties;
+}
+
+// 스쿼드 데이터 타입 정의
+interface Squad {
+  [key: string]: Player | (Player | null)[] | null;
+  BENCH: (Player | null)[];
+}
+
 
 // 샘플 선수 카드 데이터
-const samplePlayers = [
+const samplePlayers: Player[] = [
   { id: 1, name: "김선수", pos: "CF", ovr: 101, team: "T", cardType: "레전드" },
   { id: 2, name: "이선수", pos: "1B", ovr: 104, team: "T", cardType: "엘리트" },
   { id: 3, name: "박선수", pos: "LF", ovr: 96, team: "T", cardType: "KBO" },
@@ -15,7 +41,7 @@ const samplePlayers = [
   { id: 11, name: "장포수", pos: "C", ovr: 93, team: "T", cardType: "KBO" }, // 포수 추가
 ];
 
-const positions = [
+const positions: Position[] = [
   { key: "LF", label: "좌익수", style: { left: '18%', top: '30%' } },
   { key: "CF", label: "중견수", style: { left: '50%', top: '13%' } },
   { key: "RF", label: "우익수", style: { left: '82%', top: '30%' } },
@@ -30,7 +56,7 @@ const benchCount = 4;
 
 export default function SquadMaker() {
   // 각 포지션별로 선수 배치 (초기값은 샘플)
-  const [squad, setSquad] = useState({
+  const [squad, setSquad] = useState<Squad>({
     LF: samplePlayers[2],
     CF: samplePlayers[0],
     RF: samplePlayers[3],
@@ -44,7 +70,7 @@ export default function SquadMaker() {
   });
 
   // 평균 오버롤, 세트덱 스코어 샘플 계산
-  const ovrList = positions.map(pos => squad[pos.key]?.ovr || 0);
+  const ovrList = positions.map(pos => (squad[pos.key] as Player)?.ovr || 0);
   const avgOvr = (ovrList.reduce((a, b) => a + b, 0) / ovrList.length).toFixed(1);
   const setDeckScore = 125; // 샘플 값
 
@@ -80,7 +106,7 @@ export default function SquadMaker() {
             minWidth: 32,
             zIndex: pos.key === 'C' ? 2 : (pos.key === 'DH' ? 1 : 2)
           }}>
-            <PlayerCard player={squad[pos.key]} pos={pos.key} />
+            <PlayerCard player={squad[pos.key] as Player} pos={pos.key} />
           </div>
         ))}
       </div>
@@ -98,7 +124,13 @@ export default function SquadMaker() {
 }
 
 // 선수 카드 컴포넌트 (예시 스타일 반영)
-function PlayerCard({ player, pos, small }) {
+interface PlayerCardProps {
+    player: Player | null;
+    pos: string;
+    small?: boolean;
+}
+
+function PlayerCard({ player, pos, small }: PlayerCardProps) {
   if (!player) {
     return (
       <div style={{ width: small ? 70 : 110, height: small ? 90 : 140, background: 'rgba(255,255,255,0.12)', border: '2px dashed #bbb', borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#bbb', fontWeight: 600, fontSize: small ? 13 : 16 }}>
@@ -131,7 +163,7 @@ function PlayerCard({ player, pos, small }) {
   );
 }
 
-function getKoreanPos(pos) {
+function getKoreanPos(pos: string): string {
   switch(pos) {
     case 'LF': return '좌익수';
     case 'CF': return '중견수';
