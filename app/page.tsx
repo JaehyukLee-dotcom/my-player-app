@@ -1,103 +1,143 @@
-import Image from "next/image";
+import { FaUser } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
+import { SiKakaotalk } from "react-icons/si";
+import { SiNaver } from "react-icons/si";
+
+interface MenuItemProps {
+  label: string;
+  active?: boolean;
+}
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <>
+      <style>{`
+        @media (max-width: 600px) {
+          .main-logo {
+            width: 70vw !important;
+            margin-bottom: 24px !important;
+          }
+          .login-buttons {
+            gap: 16px !important;
+          }
+          .login-btn {
+            width: 40px !important;
+            height: 40px !important;
+            font-size: 22px !important;
+          }
+          .footer-inner {
+            flex-direction: column !important;
+            gap: 10px !important;
+            align-items: flex-start !important;
+          }
+          .footer-logo {
+            width: 36px !important;
+            height: 36px !important;
+          }
+          .footer-divider {
+            display: none !important;
+          }
+          .footer-text {
+            font-size: 11px !important;
+            text-align: left !important;
+          }
+          .nav-inner {
+            gap: 12px !important;
+          }
+          .menu-item {
+            font-size: 15px !important;
+            padding: 0 10px !important;
+          }
+          .mypage-label {
+            font-size: 13px !important;
+          }
+        }
+      `}</style>
+      <div style={{ minHeight: '100vh', background: '#000', display: 'flex', flexDirection: 'column' }}>
+        {/* 상단 메뉴바 */}
+        <nav style={{ width: '100%', background: '#8f5cff', display: 'flex', alignItems: 'center', height: 56, position: 'relative' }}>
+          <div className="nav-inner" style={{ display: 'flex', gap: 32, height: '100%', maxWidth: 1200, width: '100%', margin: '0 auto' }}>
+            <MenuItem label="홈" active={true} />
+            <MenuItem label="팀 메이커" active={false} />
+            <MenuItem label="팀 평가" active={false} />
+            <MenuItem label="선수 DB" active={false} />
+          </div>
+          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 12, paddingRight: 32 }}>
+            <FaUser color="#fff" size={22} style={{ marginRight: 6 }} />
+            <span className="mypage-label" style={{ color: '#fff', fontWeight: 600, fontSize: 16 }}>My Page</span>
+          </div>
+        </nav>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        {/* 메인 컨텐츠 */}
+        <main style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+          {/* 메인 로고 이미지 */}
+          <img src="/Logo_COMPGG.png" alt="COMP.GG 메인 로고" className="main-logo" style={{ width: 'min(320px, 60vw)', maxWidth: '90vw', height: 'auto', marginBottom: 32 }} />
+          {/* 간편 로그인 */}
+          <div style={{ color: '#fff', fontWeight: 500, fontSize: 'min(22px, 5vw)', marginBottom: 32, display: 'flex', alignItems: 'center', gap: 18, width: '100%', maxWidth: 400, justifyContent: 'center' }}>
+            <span style={{ flex: 1, height: 1, background: '#fff2', minWidth: 30, marginRight: 12 }} />
+            간편 로그인
+            <span style={{ flex: 1, height: 1, background: '#fff2', minWidth: 30, marginLeft: 12 }} />
+          </div>
+          {/* 로그인 버튼 */}
+          <div className="login-buttons" style={{ display: 'flex', gap: 24, flexWrap: 'wrap', justifyContent: 'center', marginBottom: 0 }}>
+            {/* 구글 */}
+            <button className="login-btn" style={{
+              width: 56, height: 56, borderRadius: '50%',
+              background: '#fff', border: 'none', boxShadow: '0 2px 8px rgba(0,0,0,0.12)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 30
+            }} aria-label="구글 로그인">
+              <FcGoogle />
+            </button>
+            {/* 카카오 */}
+            <button className="login-btn" style={{
+              width: 56, height: 56, borderRadius: '50%',
+              background: '#fee500', border: 'none', boxShadow: '0 2px 8px rgba(0,0,0,0.12)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 30
+            }} aria-label="카카오 로그인">
+              <SiKakaotalk color="#3c1e1e" />
+            </button>
+            {/* 네이버 */}
+            <button className="login-btn" style={{
+              width: 56, height: 56, borderRadius: '50%',
+              background: '#03c75a', border: 'none', boxShadow: '0 2px 8px rgba(0,0,0,0.12)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 30
+            }} aria-label="네이버 로그인">
+              <SiNaver color="#fff" />
+            </button>
+          </div>
+        </main>
+
+        {/* 푸터 */}
+        <footer style={{ width: '100%', background: '#222', color: '#ccc', fontSize: 13, padding: '16px 0 12px 0', textAlign: 'center', letterSpacing: 0.1 }}>
+          <div className="footer-inner" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 24, maxWidth: 900, margin: '0 auto' }}>
+            {/* 푸터 로고 */}
+            <img src="/Logo_CPGG.png" alt="CPGG 푸터 로고" className="footer-logo" style={{ width: 48, height: 48, objectFit: 'contain' }} />
+            {/* 구분선 */}
+            <div className="footer-divider" style={{ width: 1, height: 36, background: '#a259ff', opacity: 0.7 }} />
+            {/* 푸터 텍스트 */}
+            <span className="footer-text" style={{ color: '#ccc', fontSize: 13, textAlign: 'left', lineHeight: 1.6 }}>
+              © 2025 COMP.GG. COMP.GG is not endorsed by or affiliated with Com2uS, and does not represent the views of Com2uS or anyone involved in producing or managing 컴투스프로야구v25. All trademarks and copyrights belong to Com2uS Corp.
+            </span>
+          </div>
+        </footer>
+      </div>
+    </>
+  );
+}
+
+function MenuItem({ label, active }: MenuItemProps) {
+  return (
+    <div className="menu-item" style={{
+      color: '#fff',
+      fontWeight: 700,
+      fontSize: 18,
+      padding: '0 24px',
+      height: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      borderBottom: active ? '4px solid #fff' : '4px solid transparent',
+      background: 'none',
+      cursor: 'pointer',
+      letterSpacing: -0.5
+    }}>
+      {label}
     </div>
   );
 }
