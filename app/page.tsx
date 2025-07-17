@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { FaUser } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { SiKakaotalk } from "react-icons/si";
@@ -6,12 +7,19 @@ import { SiNaver } from "react-icons/si";
 interface MenuItemProps {
   label: string;
   active?: boolean;
+  href?: string;
 }
 
 export default function Home() {
   return (
     <>
       <style>{`
+        .menu-item {
+          text-decoration: none !important;
+        }
+        .nav-inner a {
+          text-decoration: none !important;
+        }
         @media (max-width: 600px) {
           .main-logo {
             width: 70vw !important;
@@ -31,8 +39,9 @@ export default function Home() {
             align-items: flex-start !important;
           }
           .footer-logo {
-            width: 36px !important;
-            height: 36px !important;
+            width: 28px !important;
+            height: 28px !important;
+            margin-right: -4px !important;
           }
           .footer-divider {
             display: none !important;
@@ -58,9 +67,9 @@ export default function Home() {
         <nav style={{ width: '100%', background: '#8f5cff', display: 'flex', alignItems: 'center', height: 56, position: 'relative' }}>
           <div className="nav-inner" style={{ display: 'flex', gap: 32, height: '100%', maxWidth: 1200, width: '100%', margin: '0 auto' }}>
             <MenuItem label="홈" active={true} />
-            <MenuItem label="팀 메이커" active={false} />
-            <MenuItem label="팀 평가" active={false} />
-            <MenuItem label="선수 DB" active={false} />
+            <MenuItem label="팀 메이커" href="/team-maker" />
+            <MenuItem label="팀 평가" />
+            <MenuItem label="선수 DB" href="/players" />
           </div>
           <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 12, paddingRight: 32 }}>
             <FaUser color="#fff" size={22} style={{ marginRight: 6 }} />
@@ -106,11 +115,11 @@ export default function Home() {
 
         {/* 푸터 */}
         <footer style={{ width: '100%', background: '#222', color: '#ccc', fontSize: 13, padding: '16px 0 12px 0', textAlign: 'center', letterSpacing: 0.1 }}>
-          <div className="footer-inner" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 24, maxWidth: 900, margin: '0 auto' }}>
+          <div className="footer-inner" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', maxWidth: 900, margin: '0 auto' }}>
             {/* 푸터 로고 */}
-            <img src="/Logo_CPGG.png" alt="CPGG 푸터 로고" className="footer-logo" style={{ width: 48, height: 48, objectFit: 'contain' }} />
+            <img src="/Logo_CPGG.png" alt="CPGG 푸터 로고" className="footer-logo" style={{ width: 36, height: 36, objectFit: 'contain', marginRight: -6, display: 'block' }} />
             {/* 구분선 */}
-            <div className="footer-divider" style={{ width: 1, height: 36, background: '#a259ff', opacity: 0.7 }} />
+            <div className="footer-divider" style={{ width: 1, height: 28, background: '#a259ff', opacity: 0.7, margin: '0 12px' }} />
             {/* 푸터 텍스트 */}
             <span className="footer-text" style={{ color: '#ccc', fontSize: 13, textAlign: 'left', lineHeight: 1.6 }}>
               © 2025 COMP.GG. COMP.GG is not endorsed by or affiliated with Com2uS, and does not represent the views of Com2uS or anyone involved in producing or managing 컴투스프로야구v25. All trademarks and copyrights belong to Com2uS Corp.
@@ -122,8 +131,8 @@ export default function Home() {
   );
 }
 
-function MenuItem({ label, active }: MenuItemProps) {
-  return (
+function MenuItem({ label, active, href }: MenuItemProps) {
+  const content = (
     <div className="menu-item" style={{
       color: '#fff',
       fontWeight: 700,
@@ -134,10 +143,11 @@ function MenuItem({ label, active }: MenuItemProps) {
       alignItems: 'center',
       borderBottom: active ? '4px solid #fff' : '4px solid transparent',
       background: 'none',
-      cursor: 'pointer',
+      cursor: href ? 'pointer' : 'default',
       letterSpacing: -0.5
     }}>
       {label}
     </div>
   );
+  return href ? <Link href={href}>{content}</Link> : content;
 }

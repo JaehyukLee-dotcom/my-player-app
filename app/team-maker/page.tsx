@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, CSSProperties } from "react";
+import NavBar from '../components/NavBar';
 
 // 선수 데이터 타입 정의
 interface Player {
@@ -75,51 +76,54 @@ export default function SquadMaker() {
   const setDeckScore = 125; // 샘플 값
 
   return (
-    <div style={{ minHeight: "100vh", width: '100vw', overflow: 'hidden', position: 'relative', background: '#222' }}>
-      {/* 후보선수(벤치) - 야구장 바깥 왼쪽 고정 */}
-      <div style={{ position: 'absolute', left: '2vw', top: '50%', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column', gap: 12, zIndex: 30, maxHeight: '80%', overflowY: 'auto' }}>
-        {Array.from({length: benchCount}).map((_,i) => (
-          <PlayerCard key={i} player={squad.BENCH[i]} pos={'BENCH'} small />
-        ))}
-      </div>
-      {/* 반응형 야구장+카드 영역 */}
-      <div style={{
-        position: 'relative',
-        width: 'min(80vw, 80vh)',
-        aspectRatio: '1/1',
-        margin: '0 auto',
-        background: 'transparent',
-        zIndex: 10,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}>
-        {/* 배경 이미지 */}
-        <img src="/stadium-bg.png" alt="야구장" style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0, opacity: 0.95 }} />
-        {/* 포지션별 카드 배치 */}
-        {positions.map(pos => (
-          <div key={pos.key} style={{
-            position: 'absolute',
-            ...pos.style,
-            transform: 'translate(-50%, -50%)',
-            width: '7%',
-            minWidth: 32,
-            zIndex: pos.key === 'C' ? 2 : (pos.key === 'DH' ? 1 : 2)
-          }}>
-            <PlayerCard player={squad[pos.key] as Player} pos={pos.key} />
-          </div>
-        ))}
-      </div>
-      {/* 우측 상단 요약 정보 */}
-      <div style={{ position: 'fixed', top: 32, right: 48, background: '#fff', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.08)', padding: '18px 32px', zIndex: 20, border: '1.5px solid #e0e7ef', minWidth: 220 }}>
-        <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 8 }}>팀 요약</div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 18, fontSize: 16 }}>
-          <span>평균 OVR: <b style={{ color: '#1976d2', fontSize: 20 }}>{avgOvr}</b></span>
-          <span>세트덱: <b style={{ color: '#e53935', fontSize: 20 }}>{setDeckScore}</b></span>
+    <>
+      <NavBar />
+      <div style={{ minHeight: "100vh", width: '100vw', overflow: 'hidden', position: 'relative', background: '#222' }}>
+        {/* 후보선수(벤치) - 야구장 바깥 왼쪽 고정 */}
+        <div style={{ position: 'absolute', left: '2vw', top: '50%', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column', gap: 12, zIndex: 30, maxHeight: '80%', overflowY: 'auto' }}>
+          {Array.from({length: benchCount}).map((_,i) => (
+            <PlayerCard key={i} player={squad.BENCH[i]} pos={'BENCH'} small />
+          ))}
         </div>
+        {/* 반응형 야구장+카드 영역 */}
+        <div style={{
+          position: 'relative',
+          width: 'min(80vw, 80vh)',
+          aspectRatio: '1/1',
+          margin: '0 auto',
+          background: 'transparent',
+          zIndex: 10,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+          {/* 배경 이미지 */}
+          <img src="/stadium-bg.png" alt="야구장" style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0, opacity: 0.95 }} />
+          {/* 포지션별 카드 배치 */}
+          {positions.map(pos => (
+            <div key={pos.key} style={{
+              position: 'absolute',
+              ...pos.style,
+              transform: 'translate(-50%, -50%)',
+              width: '7%',
+              minWidth: 32,
+              zIndex: pos.key === 'C' ? 2 : (pos.key === 'DH' ? 1 : 2)
+            }}>
+              <PlayerCard player={squad[pos.key] as Player} pos={pos.key} />
+            </div>
+          ))}
+        </div>
+        {/* 우측 상단 요약 정보 */}
+        <div style={{ position: 'fixed', top: 32, right: 48, background: '#fff', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.08)', padding: '18px 32px', zIndex: 20, border: '1.5px solid #e0e7ef', minWidth: 220 }}>
+          <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 8 }}>팀 요약</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 18, fontSize: 16 }}>
+            <span>평균 OVR: <b style={{ color: '#1976d2', fontSize: 20 }}>{avgOvr}</b></span>
+            <span>세트덱: <b style={{ color: '#e53935', fontSize: 20 }}>{setDeckScore}</b></span>
+          </div>
+        </div>
+        {/* 좌/우 후보/옵션 영역은 생략(반응형 우선) */}
       </div>
-      {/* 좌/우 후보/옵션 영역은 생략(반응형 우선) */}
-    </div>
+    </>
   );
 }
 
