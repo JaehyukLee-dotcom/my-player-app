@@ -8,10 +8,19 @@
   }
 }
 
+@font-face {
+  font-family: 'Neo둥근모';
+  src: url('/fonts/neodgm.woff2') format('woff2'),
+       url('/fonts/neodgm.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+  font-family: 'Neo둥근모', 'Segoe UI', Arial, Helvetica, sans-serif;
   margin: 0;
   padding: 0;
 }

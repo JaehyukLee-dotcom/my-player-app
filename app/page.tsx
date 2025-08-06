@@ -71,10 +71,10 @@ export default function Home() {
             <MenuItem label="팀 평가" />
             <MenuItem label="선수 DB" href="/players" />
           </div>
-          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 12, paddingRight: 32 }}>
+          <Link href="/mypage" style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 12, paddingRight: 32, textDecoration: 'none' }}>
             <FaUser color="#fff" size={22} style={{ marginRight: 6 }} />
             <span className="mypage-label" style={{ color: '#fff', fontWeight: 600, fontSize: 16 }}>My Page</span>
-          </div>
+          </Link>
         </nav>
 
         {/* 메인 컨텐츠 */}
